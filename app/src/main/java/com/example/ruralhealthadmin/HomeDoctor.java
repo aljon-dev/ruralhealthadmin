@@ -132,7 +132,7 @@ public class HomeDoctor extends AppCompatActivity {
                     intent.putExtra("Uid",Uid);
                     startActivity(intent);
 
-                }else if(id == R.id.RejectAppointment){
+                }else if(id == R.id.NavReject){
                     Intent intent = new Intent (HomeDoctor.this,RejectAppointment.class);
                     intent.putExtra("Uid",Uid);
                     startActivity(intent);
