@@ -47,8 +47,6 @@ public class RejectAppointment extends AppCompatActivity {
 
         AppointmentListPending.setAdapter(AppointAdapter);
 
-
-
         firebaseDatabase.getReference("Employee").child(Uid).child("Appointment").orderByChild("Status").equalTo("Reject").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
