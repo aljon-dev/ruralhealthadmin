@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class HomeSuperAdmin extends AppCompatActivity {
 
@@ -41,7 +45,9 @@ public class HomeSuperAdmin extends AppCompatActivity {
 
     RecyclerView DoctorList,AppointmentList;
 
+    ArrayList<UserRole> DoctorListItem;
 
+    EmployeeAdapter adapter;
 
 
     @Override
@@ -50,6 +56,9 @@ public class HomeSuperAdmin extends AppCompatActivity {
         setContentView(R.layout.activity_home_super_admin);
 
         String Uid = getIntent().getStringExtra("Uid");
+
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         username = findViewById(R.id.username);
         address = findViewById(R.id.userAddress);
@@ -60,10 +69,36 @@ public class HomeSuperAdmin extends AppCompatActivity {
 
         nav = findViewById(R.id.navLayOut);
         drawer = findViewById(R.id.NavDrawer);
-
         navBtn = findViewById(R.id.ShowNavigation);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        DoctorList = findViewById(R.id.DoctorList);
+        DoctorListItem = new ArrayList<>();
+
+        DoctorList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        adapter = new EmployeeAdapter(HomeSuperAdmin.this,DoctorListItem);
+
+        DoctorList.setAdapter(adapter);
+
+        firebaseDatabase.getReference("Employee").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds: snapshot.getChildren()){
+                    UserRole userRole = ds.getValue(UserRole.class);
+                    DoctorListItem.add(userRole);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
 
 
         navBtn.setOnClickListener(v -> {
