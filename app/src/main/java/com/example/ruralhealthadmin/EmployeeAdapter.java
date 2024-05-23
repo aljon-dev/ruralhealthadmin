@@ -19,7 +19,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ItemHo
 
     private ArrayList<UserRole> userRoles;
 
-
     private Context context;
 
     onClickListener onClickListener;

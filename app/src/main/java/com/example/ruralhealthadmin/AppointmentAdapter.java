@@ -18,6 +18,16 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
     private Context context;
 
+
+    OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+    public  interface OnItemClickListener {
+        void onClick(AppointmentStatus appointmentStatus);
+    }
+
     public AppointmentAdapter(Context context, ArrayList<AppointmentStatus> AppointmentList){
         this.context = context;
         this.AppointmentList = AppointmentList;
@@ -35,6 +45,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         AppointmentStatus appointmentStatus = AppointmentList.get(position);
         holder.onBind(appointmentStatus);
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onClick(AppointmentList.get(position)));
 
     }
 

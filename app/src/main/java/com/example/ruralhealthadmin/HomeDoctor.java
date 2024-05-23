@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,7 +76,15 @@ public class HomeDoctor extends AppCompatActivity {
 
         AppointmentList.setAdapter(AppointAdapter);
 
-        firebaseDatabase.getReference("Employee").child(Uid).child("Appointment").orderByChild("Status").equalTo("Waiting").addValueEventListener(new ValueEventListener() {
+
+
+
+        navBtn.setOnClickListener(v -> {
+
+            drawer.open();
+        });
+
+        firebaseDatabase.getReference("Employee").child(Uid).child("Appointment").orderByChild("Status").equalTo("Approved").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds: snapshot.getChildren()){
@@ -91,6 +100,24 @@ public class HomeDoctor extends AppCompatActivity {
             }
         });
 
+        firebaseDatabase.getReference("Employee").child(Uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserRole userRole = snapshot.getValue(UserRole.class);
+                username.setText(userRole.getUsername());
+                address.setText(userRole.getAddress());
+                Number.setText(userRole.getContact());
+
+
+                Glide.with(HomeDoctor.this).load(userRole.getProfile()).error(R.drawable.logo).into(UserProfile);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -102,7 +129,7 @@ public class HomeDoctor extends AppCompatActivity {
 
                 }else if(id == R.id.NavManage){
                     Intent intent = new Intent (HomeDoctor.this, UpdateProfile.class);
-
+                    intent.putExtra("Uid",Uid);
                     startActivity(intent);
 
                 }else if(id == R.id.RejectAppointment){
@@ -111,8 +138,9 @@ public class HomeDoctor extends AppCompatActivity {
                     startActivity(intent);
 
 
-                }else if(id == R.id.PendingAppointment){
+                }else if(id == R.id.NavPending){
                     Intent intent = new Intent (HomeDoctor.this,PendingAppointment.class);
+                    intent.putExtra("Uid",Uid);
                     startActivity(intent);
 
                 }else if(id == R.id.NavAbout){

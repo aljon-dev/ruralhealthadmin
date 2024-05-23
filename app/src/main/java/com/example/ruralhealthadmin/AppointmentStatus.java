@@ -2,7 +2,7 @@ package com.example.ruralhealthadmin;
 
 public class AppointmentStatus {
 
-    String AdminUid,Date,PatientId,PatientName,Position,Status,Time,name;
+    String AdminUid,Date,PatientId,PatientName,Position,Status,Time,name,AppointId;
 
     public AppointmentStatus(){
 
@@ -70,5 +70,13 @@ public class AppointmentStatus {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAppointId() {
+        return AppointId;
+    }
+
+    public void setAppointId(String appointId) {
+        AppointId = appointId;
     }
 }

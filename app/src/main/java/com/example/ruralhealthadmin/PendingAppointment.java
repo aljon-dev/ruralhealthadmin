@@ -1,9 +1,11 @@
 package com.example.ruralhealthadmin;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PendingAppointment extends AppCompatActivity {
 
@@ -28,6 +32,8 @@ public class PendingAppointment extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +43,8 @@ public class PendingAppointment extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
+        AppointmentListPending = findViewById(R.id.AppointmentListPending);
+
 
         AppointmentListPending.setLayoutManager(new LinearLayoutManager(this));
         AppointmentStatusList = new ArrayList<>();
@@ -44,7 +52,14 @@ public class PendingAppointment extends AppCompatActivity {
 
         AppointmentListPending.setAdapter(AppointAdapter);
 
-        firebaseDatabase.getReference("Patients").child(Uid).child("Appointment").addValueEventListener(new ValueEventListener() {
+        AppointAdapter.setOnItemClickListener(new AppointmentAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(AppointmentStatus appointmentStatus) {
+                Action(appointmentStatus);
+            }
+        });
+
+        firebaseDatabase.getReference("Employee").child(Uid).child("Appointment").orderByChild("Status").equalTo("Waiting").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds: snapshot.getChildren()){
@@ -62,5 +77,36 @@ public class PendingAppointment extends AppCompatActivity {
 
 
 
+    }
+    private void Action(AppointmentStatus appointmentStatus){
+        AlertDialog.Builder Choose = new AlertDialog.Builder(PendingAppointment.this);
+        Choose.setTitle("Action");
+
+        CharSequence actionpick [] = {"Confirm","Cancelled"};
+
+        Choose.setItems(actionpick, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0 ){
+                    Map<String, Object> StatusUpdate = new HashMap<>();
+                    StatusUpdate.put("Status","Approved");
+
+                    firebaseDatabase.getReference("Employee").child(appointmentStatus.getAdminUid()).child("Appointment").child(appointmentStatus.getAppointId()).updateChildren(StatusUpdate);
+
+                    firebaseDatabase.getReference("Patients").child(appointmentStatus.getPatientId()).child("Appointment").child(appointmentStatus.getAppointId()).updateChildren(StatusUpdate);
+
+                }else if(which == 1){
+
+                    Map<String, Object> StatusUpdate = new HashMap<>();
+                    StatusUpdate.put("Status","Reject");
+
+                    firebaseDatabase.getReference("Employee").child(appointmentStatus.getAdminUid()).child("Appointment").child(appointmentStatus.getAppointId()).updateChildren(StatusUpdate);
+
+                    firebaseDatabase.getReference("Patients").child(appointmentStatus.getPatientId()).child("Appointment").child(appointmentStatus.getAppointId()).updateChildren(StatusUpdate);
+
+                }
+            }
+        });
+        Choose.show();
     }
 }
