@@ -21,25 +21,15 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/DoctorName"
+                android:id="@+id/PatientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:textStyle="bold"
                 android:textSize="20dp"
-                android:text="Doctor Name" />
+                android:text="Patient Name" />
 
-
-            <TextView
-                android:id="@+id/Doctor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
-                android:textStyle="bold"
-                android:textSize="15dp"
-                android:text="Position Role" />
 
             <TextView
                 android:id="@+id/status"
@@ -67,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="0dp"
 
                 android:textSize="20dp"
                 android:text="12:00PM" />
@@ -77,11 +67,11 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="0dp"
 
-                android:textSize="20dp"
-                android:text="1/24/24"/>
+                android:text="1/24/24"
+                android:textSize="20dp" />
 
 
         </LinearLayout>

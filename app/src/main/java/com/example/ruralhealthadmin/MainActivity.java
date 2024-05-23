@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         if (snapshot.exists()) {
 
                            String  Role = snapshot.child("role").getValue().toString();
-                            if(Role.equals("Doctor")){
+                            if(Role.equals("Doctor") || Role.equals("Dentist") || Role.equals("Pediatrician")){
                                 Intent intent = new Intent(MainActivity.this, HomeDoctor.class);
                                 intent.putExtra("Uid",user.getUid());
                                 Toast.makeText(MainActivity.this, "Hi Welcome " + Role, Toast.LENGTH_SHORT).show();
