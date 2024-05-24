@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start"
-
     tools:context=".HomeDoctor">
 
 
@@ -22,7 +21,6 @@
         app:itemIconTint="@color/white"
         app:menu="@menu/menu"
         android:layout_gravity="start"
-
         >
 
     </com.google.android.material.navigation.NavigationView>
